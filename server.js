@@ -41,6 +41,10 @@ app.get('/',function (req,res) {
     res.send('ToDo API Root');
 });
 
+app.post('/todos',function(req,res){
+   res.json(req.body); 
+});
+
 app.listen(port,function(){
    console.log('Express listening on port: ' + port); 
 });
