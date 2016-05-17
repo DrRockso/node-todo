@@ -4,6 +4,38 @@ var app = express();
 
 const port = process.env.PORT || 5000;
 
+var todos = [{
+    id: 1,
+    description: 'Surf',
+    completed: false
+}, {
+    id: 2,
+    description: 'Eat dinner',
+    completed: false
+},{
+    id:3,
+    description: 'Get angry at boss',
+    completed: true 
+}];
+
+
+app.get('/todos',function(req,res){
+    res.json(todos);
+});
+
+app.get('/todos/:id',function(req,res){
+   var matched;
+   
+   todos.forEach(function(todo){
+      if(todo.id.toString() === req.params.id)
+      {
+          matched = todo;
+      } 
+   });
+   
+   res.json(matched);
+    
+});
 
 app.get('/',function (req,res) {
     res.send('ToDo API Root');
