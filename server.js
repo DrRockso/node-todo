@@ -14,7 +14,7 @@ var todos = [{
     completed: false
 },{
     id:3,
-    description: 'Get angry at boss',
+    description: 'Get angry at Mark',
     completed: true 
 }];
 
