@@ -42,7 +42,7 @@ app.get('/',function (req,res) {
 });
 
 app.post('/todos',function(req,res){
-   res.json(req.body); 
+   res.json(req.body);
 });
 
 app.listen(port,function(){
