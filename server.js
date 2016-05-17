@@ -33,8 +33,11 @@ app.get('/todos/:id',function(req,res){
       } 
    });
    
-   res.json(matched);
-    
+   if(typeof matched === 'undefined')
+   {
+       res.status(404).send();
+   }
+   res.json(matched);    
 });
 
 app.get('/',function (req,res) {
@@ -42,7 +45,7 @@ app.get('/',function (req,res) {
 });
 
 app.post('/todos',function(req,res){
-   res.json(req.body);
+   console.log(req);
 });
 
 app.listen(port,function(){
