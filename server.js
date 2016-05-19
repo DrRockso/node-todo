@@ -58,6 +58,70 @@ app.post('/todos',function(req,res){
     res.json(todos);
 });
 
+app.delete('/todos/:id',function (req,res) {
+    var matched;
+    
+    try
+    {
+        matched = _.findWhere(todos,{id: parseInt(req.params.id)});
+        
+        if(!matched)
+        {
+            res.status(404).json({"error":"No todo at that id"});
+        }
+        
+        todos = _.without(todos,matched);
+    }
+    catch(e)
+    {
+        res.status(400).send();   
+    }
+    
+    res.status(200);
+    res.json(matched);
+});
+
+app.put('/todos/:id',function (req,res){
+   var body = _.pick(req.body,'description','completed');
+   
+   body.description = body.description.trim();
+   
+   var valid = {};
+   
+   var matched = _.findWhere(todos,{id: parseInt(req.params.id)});
+   
+   if(!matched)
+   {
+       return res.status(404).json({"error":"No todo at that id"});
+   }
+   
+   if(body.hasOwnProperty('completed') && _.isBoolean(body.completed))
+   {
+       valid.completed = body.completed;
+   }
+   else if(body.hasOwnProperty('completed'))
+   {
+       return res.status(400).json({"error":"Completed must be boolean"});
+   }
+   
+   
+   
+   if(body.hasOwnProperty('description') && _.isString(body.description) && body.description.length > 0)
+   {
+       valid.description = body.description
+   }
+   else if(body.hasOwnProperty('description'))
+   {
+       return res.status(400).json({"error":"Description must be string"});
+   }
+   
+   
+   _.extend(matched,valid);   
+   
+   res.status(200).send(matched);
+   
+});
+
 app.listen(port,function(){
    console.log('Express listening on port: ' + port); 
 });
