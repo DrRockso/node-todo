@@ -15,8 +15,24 @@ app.get('/',function (req,res) {
 });
 
 app.get('/todos',function(req,res){
+    var qParam = req.query;
+    
+    if(qParam.hasOwnProperty('completed') && qParam.completed === 'true')
+    {
+        return res.json(_.where(todos,{completed:true}));
+    }
+    else if(qParam.hasOwnProperty('completed') && qParam.completed === 'false') 
+    {    
+        return res.json(_.where(todos,{completed:false}));
+    }
+    
     res.json(todos);
 });
+
+app.get('/todos/completed',function(req,res){
+   res.json(_.where(todos,{completed:true}));
+});
+
 
 app.get('/todos/:id',function(req,res){
     
@@ -103,7 +119,6 @@ app.put('/todos/:id',function (req,res){
    {
        return res.status(400).json({"error":"Completed must be boolean"});
    }
-   
    
    
    if(body.hasOwnProperty('description') && _.isString(body.description) && body.description.length > 0)
