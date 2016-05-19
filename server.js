@@ -16,17 +16,27 @@ app.get('/',function (req,res) {
 
 app.get('/todos',function(req,res){
     var qParam = req.query;
+    var filtered = todos;
     
     if(qParam.hasOwnProperty('completed') && qParam.completed === 'true')
     {
-        return res.json(_.where(todos,{completed:true}));
+        filtered =  _.where(filtered,{completed:true});
     }
     else if(qParam.hasOwnProperty('completed') && qParam.completed === 'false') 
-    {    
-        return res.json(_.where(todos,{completed:false}));
+    {        
+        filtered = _.where(filtered,{completed:false});
     }
     
-    res.json(todos);
+    if(qParam.hasOwnProperty('q') && qParam.q.trim().length > 0){
+        filtered = _.filter(filtered,function (todo) {
+            if(todo.description.toLowerCase().indexOf(qParam.q.toLowerCase()) > -1){
+                return todo;
+            }            
+        });
+    }
+    
+    
+    res.json(filtered);
 });
 
 app.get('/todos/completed',function(req,res){
@@ -37,13 +47,6 @@ app.get('/todos/completed',function(req,res){
 app.get('/todos/:id',function(req,res){
     
    var matched = _.findWhere(todos,{id: parseInt(req.params.id)});
-   
-//    todos.forEach(function(todo){
-//       if(todo.id.toString() === req.params.id)
-//       {
-//           matched = todo;
-//       } 
-//    });
 
    
    if(typeof matched === 'undefined')
