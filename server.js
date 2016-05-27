@@ -124,7 +124,6 @@ app.put('/todos/:id',function (req,res){
    
 });
 
-
 app.post('/users',function(req,res){
     
    var body = _.pick(req.body,'email','password');
@@ -135,7 +134,6 @@ app.post('/users',function(req,res){
        res.status(400).json(e);
    });    
 });
-
 
 db.sequelize.sync().then(function(){
     app.listen(port,function(){
