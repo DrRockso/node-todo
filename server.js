@@ -3,6 +3,7 @@ var bodyparser = require('body-parser');
 var _ = require('underscore');
 var db = require('./db.js');
 var bcrypt = require('bcrypt');
+var middleware = require('./middleware.js')(db);
 
 
 var app = express();
@@ -17,7 +18,7 @@ app.get('/',function (req,res) {
     res.send('ToDo API Root');
 });
 
-app.get('/todos',function(req,res){
+app.get('/todos',middleware.requireAuth,function(req,res){
     var query = req.query;
     
     var where = {};
