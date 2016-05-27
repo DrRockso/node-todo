@@ -16,28 +16,27 @@ app.get('/',function (req,res) {
 });
 
 app.get('/todos',function(req,res){
-    var qParam = req.query;
-    var filtered = todos;
+    var query = req.query;
     
-    if(qParam.hasOwnProperty('completed') && qParam.completed === 'true')
-    {
-        filtered =  _.where(filtered,{completed:true});
-    }
-    else if(qParam.hasOwnProperty('completed') && qParam.completed === 'false') 
-    {        
-        filtered = _.where(filtered,{completed:false});
+    var where = {};
+    
+    if(query.hasOwnProperty('completed') && query.completed === 'true'){
+        where.completed = true;
+    }else if(query.hasOwnProperty('completed') && query.completed === 'false'){
+        where.completed = false;
     }
     
-    if(qParam.hasOwnProperty('q') && qParam.q.trim().length > 0){
-        filtered = _.filter(filtered,function (todo) {
-            if(todo.description.toLowerCase().indexOf(qParam.q.toLowerCase()) > -1){
-                return todo;
-            }            
-        });
+    if(query.hasOwnProperty('q') && query.q.length > 0){
+        where.description = {
+            $like: '%' + query.q + '%'
+        };
     }
     
-    
-    res.json(filtered);
+    db.todo.findAll({where:where}).then(function(todos){
+        res.json(todos);
+    }).catch(function(e){
+       res.status(500).send();
+    });
 });
 
 app.get('/todos/completed',function(req,res){
@@ -49,7 +48,7 @@ app.get('/todos/:id',function(req,res){
    var todoId = parseInt(req.params.id,10);
    
    var todo = db.todo.findById(todoId).then(function(todo){
-       if(!!todo){
+       if(todo){
            res.json(todo.toJSON());
        }else{
            res.status(404).send();
@@ -69,21 +68,6 @@ app.post('/todos',function(req,res){
     }).catch(function(e){
         res.status(400).send(e);
     });
-    
-    // body.description = body.description.trim();
-    
-    // if(!_.isBoolean(body.completed) || !_.isString(body.description) || body.description.length === 0)
-    // {
-    //     return res.status(400).send();
-    // }
-    
-    // body.id = todoNextId;
-    
-    // todos.push(body);
-    
-    // todoNextId++;
-    
-    // res.json(todos);
 });
 
 app.delete('/todos/:id',function (req,res) {
