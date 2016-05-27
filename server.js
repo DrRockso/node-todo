@@ -93,41 +93,34 @@ app.delete('/todos/:id',function (req,res) {
 
 app.put('/todos/:id',function (req,res){
    var body = _.pick(req.body,'description','completed');
+   var todoId = parseInt(req.params.id);
    
-   body.description = body.description.trim();
+   var attributes = {};
    
-   var valid = {};
    
-   var matched = _.findWhere(todos,{id: parseInt(req.params.id)});
-   
-   if(!matched)
+   if(body.hasOwnProperty('completed'))
    {
-       return res.status(404).json({"error":"No todo at that id"});
+       attributes.completed = body.completed;
    }
    
-   if(body.hasOwnProperty('completed') && _.isBoolean(body.completed))
+   if(body.hasOwnProperty('description'))
    {
-       valid.completed = body.completed;
-   }
-   else if(body.hasOwnProperty('completed'))
-   {
-       return res.status(400).json({"error":"Completed must be boolean"});
+       attributes.description = body.description
    }
    
-   
-   if(body.hasOwnProperty('description') && _.isString(body.description) && body.description.length > 0)
-   {
-       valid.description = body.description
-   }
-   else if(body.hasOwnProperty('description'))
-   {
-       return res.status(400).json({"error":"Description must be string"});
-   }
-   
-   
-   _.extend(matched,valid);   
-   
-   res.status(200).send(matched);
+   db.todo.findById(todoId).then(function(todo){
+       if(todo){
+           todo.update(attributes).then(function(todo){
+                res.json(todo.toJSON());
+            },function(e){
+                res.status(400).json(e);
+            });
+       }else{
+           res.status(404).json({"error":"No todo at that id"});
+       }
+   },function(){
+       res.status(500).send();
+   });
    
 });
 
