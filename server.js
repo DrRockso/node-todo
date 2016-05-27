@@ -71,26 +71,24 @@ app.post('/todos',function(req,res){
 });
 
 app.delete('/todos/:id',function (req,res) {
-    var matched;
+    var todoId = parseInt(req.params.id);
+           
+        db.todo.destroy({
+            where:{
+                id:todoId
+            }
+        }).then(function(rowsDeleted){
+            if(rowsDeleted === 0)
+            {
+                res.status(404).json({"error":"No todo at that id"});
+            }
+            else{
+                res.send(204).send();
+            }
+        },function(e){
+          res.status(500).send();  
+        })
     
-    try
-    {
-        matched = _.findWhere(todos,{id: parseInt(req.params.id)});
-        
-        if(!matched)
-        {
-            res.status(404).json({"error":"No todo at that id"});
-        }
-        
-        todos = _.without(todos,matched);
-    }
-    catch(e)
-    {
-        res.status(400).send();   
-    }
-    
-    res.status(200);
-    res.json(matched);
 });
 
 app.put('/todos/:id',function (req,res){
