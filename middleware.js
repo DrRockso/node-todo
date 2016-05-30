@@ -6,7 +6,8 @@ module.exports = function(db){
             db.user.findByToken(token).then(function(user){
                 req.user = user;
                 next();
-            },function(){
+            },function(e){
+               console.log(e);
                res.status(401).send(); 
             });
         }

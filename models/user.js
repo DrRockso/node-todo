@@ -81,11 +81,11 @@ module.exports = function(sequelize,DataTypes){
                                 resolve(user);
                             }
                             else{
-                                reject();
+                                reject('FUCK YOU');
                             }
                         },function(){
-                            reject();
-                        })
+                            reject('FUCK YOU');
+                        });
                         
                     }
                     catch(e){

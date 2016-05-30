@@ -14,8 +14,12 @@ var todoNextId = 1;
 
 app.use(bodyparser.json());
 
+app.use(express.static(__dirname + '/Views'));
+app.use(express.static(__dirname + '/Scripts'));
+app.use(express.static(__dirname + '/Style'));
+
 app.get('/',function (req,res) {
-    res.send('ToDo API Root');
+    res.sendFile('index.html');
 });
 
 app.get('/todos',middleware.requireAuth,function(req,res){
@@ -65,9 +69,13 @@ app.post('/todos',middleware.requireAuth,function(req,res){
     
     var body = _.pick(req.body,'description','completed');
     
-    
     db.todo.create(body).then(function(todo){
-        res.json(todo.toJSON());
+        req.user.addTodo(todo).then(function () {
+            return todo.reload();
+        }).then(function () {
+            res.json(todo.toJSON());
+        })
+        
     }).catch(function(e){
         res.status(400).send(e);
     });
