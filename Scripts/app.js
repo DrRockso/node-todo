@@ -37,7 +37,7 @@ myApp.controller('mainController',['$scope','$http','authService',function($scop
     $scope.isAuth = false;
     
     $scope.login = function(){
-        $http.post('http://localhost:5000/users/login', {email: $scope.model.email,password: $scope.model.password})
+        $http.post('/users/login', {email: $scope.model.email,password: $scope.model.password})
         .success(function(result,status,headers){
             if(status === 200){
                 authService.authToken = headers().auth;
@@ -75,7 +75,7 @@ myApp.controller('loginController',['$scope','$http','authService',function($sco
     $scope.signUp = function(){
         $scope.model.errors = [];
         
-        $http.post('http://localhost:5000/users',{email: $scope.model.email,password: $scope.model.password})
+        $http.post('/users',{email: $scope.model.email,password: $scope.model.password})
             .success(function (result,status,headers) {
                 $scope.model.successSignUp = true;
             })
