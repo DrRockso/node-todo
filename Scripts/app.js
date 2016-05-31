@@ -21,7 +21,6 @@ myApp.config(function ($routeProvider) {
 });
 
 myApp.service('authService',function(){
-   
    this.authToken = '';
    this.isAuth = false;
     
@@ -41,7 +40,6 @@ myApp.controller('mainController',['$scope','$http','authService',function($scop
         $http.post('http://localhost:5000/users/login', {email: $scope.model.email,password: $scope.model.password})
         .success(function(result,status,headers){
             if(status === 200){
-                alert("AUth Token: " + headers().auth);
                 authService.authToken = headers().auth;
                 authService.isAuth = true;
                 $scope.isAuth = true;
@@ -70,7 +68,22 @@ myApp.controller('loginController',['$scope','$http','authService',function($sco
     $scope.model = {
         email : '',
         password : '',
+        successSignUp :false,
+        errors : []
     };
+    
+    $scope.signUp = function(){
+        $scope.model.errors = [];
+        
+        $http.post('http://localhost:5000/users',{email: $scope.model.email,password: $scope.model.password})
+            .success(function (result,status,headers) {
+                successSignUp = true;
+            })
+            .error(function (result,status,headers) {
+                $scope.model.error.push('Error trying to create account')
+            })
+    }
+    
 }]);
 
 
@@ -80,8 +93,7 @@ myApp.controller('todoController',['$scope','$http','authService',function($scop
         alert("Not Authenticated");
     }else{
         
-    }
-    
+    }    
     
 }]);
 
