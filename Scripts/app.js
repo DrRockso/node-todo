@@ -77,10 +77,10 @@ myApp.controller('loginController',['$scope','$http','authService',function($sco
         
         $http.post('http://localhost:5000/users',{email: $scope.model.email,password: $scope.model.password})
             .success(function (result,status,headers) {
-                successSignUp = true;
+                $scope.model.successSignUp = true;
             })
             .error(function (result,status,headers) {
-                $scope.model.error.push('Error trying to create account')
+                $scope.model.errors.push('Error trying to create account')
             })
     }
     
