@@ -6,16 +6,16 @@
   </div>   
   <div class="input-group">
     <label for="usr">UserName:</label>
-    <input type="text" class="form-control" id="usr" />
+    <input type="text" class="form-control" id="usr" ng-model="model.email" />
   </div>
   <div class="input-group">
     <br/>
     <label for="pwd">Password:</label>
-    <input type="password" class="form-control" id="pwd" />
+    <input type="password" class="form-control" id="pwd" ng-model="model.password"/>
   </div>
   <div class="input-group">
     <br/>
-    <input type="button" class="btn btn-primary" value="Log In"/>
+    <input type="button" class="btn btn-primary" value="Log In" ng-click="login()"/>
   </div>
 </div>
   
