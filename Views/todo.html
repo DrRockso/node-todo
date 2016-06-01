@@ -1,0 +1,12 @@
+<div ng-if="isAuth">
+    <input type="text" ng-model="model.description" />    
+    <input type="button" class="btn btn-success" ng-click="addTodo()" value="Add" />
+    <select ng-model="model.submitTodo" >
+        <option ng-repeat="opt in model.options" value="{{opt.value}}">{{opt.name}}</option>
+    </select>
+</div>
+<div ng-if="!isAuth">
+    <ul ng-repeat="error in model.errors">
+        <li>{{error}}</li>
+    </ul>
+</div>

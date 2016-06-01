@@ -23,7 +23,6 @@ myApp.config(function ($routeProvider) {
 myApp.service('authService',function(){
    this.authToken = '';
    this.isAuth = false;
-    
 });
 
 
@@ -89,10 +88,45 @@ myApp.controller('loginController',['$scope','$http','authService',function($sco
 
 myApp.controller('todoController',['$scope','$http','authService',function($scope,$http,authService){
     
-    if(!authService.isAuth){
-        alert("Not Authenticated");
-    }else{
-        
+    $scope.model = {
+        description: "",
+        submitTodo: null,
+        options:[{
+            name: 'Yes',
+            value: true
+        },{
+            name: 'No',
+            value: false
+        }],
+        errors: []
+    }
+    
+    // $scope.isAuth = false;
+    
+    // $scope.$watch('isAuth',function(){
+        $scope.isAuth = authService.isAuth;
+    // });    
+    
+    if(!$scope.isAuth){
+        $scope.model.errors.push('Please login to access this page')
+    }
+    
+    
+    $scope.addTodo = function(){
+        if(!$scope.isAuth){
+            $scope.model.errors.push('Please login to access this page')
+        }
+        else{
+            console.log($scope.model);
+            $http.post('/todos',{description: $scope.model.description, completed: $scope.model.submitTodo},
+                                                                   {headers: {'Auth': authService.authToken}})
+            .success(function (result,status,headers) {
+                alert(result.toString()); 
+            })
+            .error(function(result,status,headers){
+                alert("Error: " + status + " " + result.toString());
+            });
+        }             
     }    
     
 }]);
