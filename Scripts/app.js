@@ -98,6 +98,7 @@ myApp.controller('todoController',['$scope','$http','authService',function($scop
             name: 'No',
             value: false
         }],
+        currentTodos: null,
         errors: []
     }
     
@@ -110,6 +111,15 @@ myApp.controller('todoController',['$scope','$http','authService',function($scop
     if(!$scope.isAuth){
         $scope.model.errors.push('Please login to access this page')
     }
+    else{
+        $http.get('/todos',{headers:{'Auth': authService.authToken}})
+            .success(function (result,status,headers) {
+                $scope.model.currentTodos = result;
+            })
+            .error(function (result,status) {
+                $scope.model.errors.push('Unable to get todos');
+            })
+    }
     
     
     $scope.addTodo = function(){
@@ -121,7 +131,9 @@ myApp.controller('todoController',['$scope','$http','authService',function($scop
             $http.post('/todos',{description: $scope.model.description, completed: $scope.model.submitTodo},
                                                                    {headers: {'Auth': authService.authToken}})
             .success(function (result,status,headers) {
-                alert(result.toString()); 
+                $scope.model.currentTodos = result;
+                $scope.model.description = '';
+                $scope.model.submitTodo = null;
             })
             .error(function(result,status,headers){
                 alert("Error: " + status + " " + result.toString());

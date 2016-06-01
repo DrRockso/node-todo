@@ -1,9 +1,30 @@
 <div ng-if="isAuth">
-    <input type="text" ng-model="model.description" />    
-    <input type="button" class="btn btn-success" ng-click="addTodo()" value="Add" />
-    <select ng-model="model.submitTodo" >
-        <option ng-repeat="opt in model.options" value="{{opt.value}}">{{opt.name}}</option>
-    </select>
+    <div class="page-header">
+        <h3>Todos</h3>
+    </div>
+    <table>
+        <thead>
+            <tr>
+                <th>Task</th>
+                <th>Completed</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="todo in model.currentTodos">
+                <td>{{todo.description}}</td>
+                <td>{{todo.completed}}</td>
+            </tr>
+        </tbody>
+    </table>
+    
+    <div>
+        <h3>Add a Todo Item</h3>
+        <input type="text" ng-model="model.description" />    
+        <input type="button" class="btn btn-success" ng-click="addTodo()" value="Add" />
+        <select ng-model="model.submitTodo" >
+            <option ng-repeat="opt in model.options" value="{{opt.value}}">{{opt.name}}</option>
+        </select>
+    </div>
 </div>
 <div ng-if="!isAuth">
     <ul ng-repeat="error in model.errors">

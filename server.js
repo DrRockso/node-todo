@@ -73,7 +73,10 @@ app.post('/todos',middleware.requireAuth,function(req,res){
         req.user.addTodo(todo).then(function () {
             return todo.reload();
         }).then(function () {
-            res.json(todo.toJSON());
+            
+            db.todo.findAll().then(function (todos) {
+                res.json(todos);
+            });            
         })
         
     }).catch(function(e){
