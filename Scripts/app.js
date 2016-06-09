@@ -58,6 +58,19 @@ myApp.controller('mainController',['$scope','$http','authService',function($scop
             
         });
     }
+
+    $scope.logout = function(){
+        $http.delete('/users/login',{headers : {Auth:authService.authToken}})
+            .success(function(result){
+                authService.isAuth = false;
+                $scope.isAuth = false;
+                authService.authToken = '';
+
+            })
+            .error(function(result,status,headers){
+
+            });
+    }
     
 }]);
 
@@ -98,16 +111,12 @@ myApp.controller('todoController',['$scope','$http','authService',function($scop
             name: 'No',
             value: false
         }],
-        currentTodos: null,
+        currentTodos: [],
         errors: []
     }
     
-    // $scope.isAuth = false;
-    
-    // $scope.$watch('isAuth',function(){
-        $scope.isAuth = authService.isAuth;
-    // });    
-    
+    $scope.isAuth = authService.isAuth;
+      
     if(!$scope.isAuth){
         $scope.model.errors.push('Please login to access this page')
     }
@@ -142,4 +151,12 @@ myApp.controller('todoController',['$scope','$http','authService',function($scop
     }    
     
 }]);
+
+myApp.directive("todoResult",function(){
+    return {
+        templateUrl: 'directives/todoresult.html',
+        replace: true,
+        restrict: 'E'
+    }
+})
 

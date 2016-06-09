@@ -40,7 +40,7 @@
                             <a class="nav-link" href="#/todo" ng-if="isAuth">To Do List</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link"href="#/login" ng-if="!isAuth">Sign Up</a>
+                            <a class="nav-link" href="#/login" ng-if="!isAuth">Sign Up</a>
                         </li>
                     </ul>
                     <ul class="nav navbar-nav navbar-right" ng-if="!isAuth">
@@ -50,6 +50,7 @@
                     </ul>
                     <ul class="nav navbar-nav navbar-right" ng-if="isAuth">
                           <li><label>Hello, {{model.email}}</label></li>
+                          <li><input class="btn btn-success" type="button" href="#/" ng-click="logout()" value="Logout"/></li>
                     </ul>
                 </diV>
             </nav>  

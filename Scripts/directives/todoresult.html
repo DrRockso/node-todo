@@ -1,0 +1,14 @@
+<table>
+    <thead>
+        <tr>
+            <th>Task</th>
+            <th>Completed</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr ng-repeat="todo in model.currentTodos">
+            <td>{{todo.description}}</td>
+            <td>{{todo.completed}}</td>
+        </tr>
+    </tbody>
+</table>
