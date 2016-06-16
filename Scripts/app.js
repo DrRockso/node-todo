@@ -23,6 +23,10 @@ myApp.config(function ($routeProvider) {
 myApp.service('authService',function(){
    this.authToken = '';
    this.isAuth = false;
+
+   this.getAuth = function(){
+       return this.isAuth;
+   };
 });
 
 
@@ -114,8 +118,15 @@ myApp.controller('todoController',['$scope','$http','authService',function($scop
         currentTodos: [],
         errors: []
     }
+
+    $scope.service = authService;
+
+    $scope.$watch('service.getAuth()',function(){
+            $scope.isAuth = $scope.service.getAuth();
+    });   
+
+    $scope.isAuth = $scope.service.getAuth(); 
     
-    $scope.isAuth = authService.isAuth;
       
     if(!$scope.isAuth){
         $scope.model.errors.push('Please login to access this page')
