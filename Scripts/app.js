@@ -107,7 +107,7 @@ myApp.controller('todoController',['$scope','$http','authService',function($scop
     
     $scope.model = {
         description: "",
-        submitTodo: null,
+        submitTodo: false,
         options:[{
             name: 'Yes',
             value: true
