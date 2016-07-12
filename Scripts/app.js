@@ -1,6 +1,4 @@
-var myApp = angular.module('myApp',['ngRoute']);
-
-
+var myApp = angular.module('myApp',['ngRoute','ngCookies']);
 
 myApp.config(function ($routeProvider) {
     
@@ -20,29 +18,41 @@ myApp.config(function ($routeProvider) {
     
 });
 
-myApp.service('authService',function(){
-   this.authToken = '';
-   this.isAuth = false;
+myApp.service('authService',function($cookies){
 
+   this.authToken = $cookies.get('authToken');
+   this.isAuth = false;
+   if($cookies.get('isAuth') === "true"){
+       this.isAuth = true;
+    }
+   this.email = $cookies.get('email');
    this.getAuth = function(){
        return this.isAuth;
    };
 });
 
-
-myApp.controller('mainController',['$scope','$http','authService',function($scope,$http,authService){
+myApp.controller('mainController',['$scope','$http','$cookies','authService',function($scope,$http,$cookies,authService){
     
     $scope.model = {
-        email : '',
+        email : authService.email,
         password : '',
     };
     
-    $scope.isAuth = false;
-    
+    $scope.service = authService;
+
+    $scope.$watch('service.getAuth()',function(){
+            $scope.isAuth = $scope.service.getAuth();
+    });   
+
+    $scope.isAuth = $scope.service.getAuth(); 
+
     $scope.login = function(){
         $http.post('/users/login', {email: $scope.model.email,password: $scope.model.password})
         .success(function(result,status,headers){
             if(status === 200){
+                $cookies.put('authToken',headers().auth);
+                $cookies.put('isAuth',true);
+                $cookies.put('email',$scope.model.email);
                 authService.authToken = headers().auth;
                 authService.isAuth = true;
                 $scope.isAuth = true;
@@ -66,6 +76,9 @@ myApp.controller('mainController',['$scope','$http','authService',function($scop
     $scope.logout = function(){
         $http.delete('/users/login',{headers : {Auth:authService.authToken}})
             .success(function(result){
+                $cookies.put('authToken','');
+                $cookies.put('isAuth',false);
+                $cookies.put('email','');
                 authService.isAuth = false;
                 $scope.isAuth = false;
                 authService.authToken = '';
@@ -79,7 +92,7 @@ myApp.controller('mainController',['$scope','$http','authService',function($scop
 }]);
 
 
-myApp.controller('loginController',['$scope','$http','authService',function($scope,$http,authService){
+myApp.controller('loginController',['$scope','$http',function($scope,$http){
     
     $scope.model = {
         email : '',
@@ -127,7 +140,7 @@ myApp.controller('todoController',['$scope','$http','authService',function($scop
 
     $scope.isAuth = $scope.service.getAuth(); 
     
-      
+
     if(!$scope.isAuth){
         $scope.model.errors.push('Please login to access this page')
     }
