@@ -3,12 +3,15 @@
         <tr>
             <th>Task</th>
             <th>Completed</th>
+            <th>Actions</th>
         </tr>
     </thead>
     <tbody>
         <tr ng-repeat="todo in model.currentTodos">
             <td>{{todo.description}}</td>
             <td>{{todo.completed}}</td>
+            <td ng-if="todo.completed"><a href="#/todo" ng-click="updateTodo(todo)">Mark as not complete<a></td>
+            <td ng-if="!todo.completed"><a href="#/todo" ng-click="updateTodo(todo)">Mark Completed<a></td>
         </tr>
     </tbody>
 </table>

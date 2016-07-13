@@ -48,11 +48,6 @@ app.get('/todos',middleware.requireAuth,function(req,res){
     });
 });
 
-// app.get('/todos/completed',function(req,res){
-//    res.json(_.where(todos,{completed:true}));
-// });
-
-
 app.get('/todos/:id',middleware.requireAuth,function(req,res){
    var todoId = parseInt(req.params.id,10);
    

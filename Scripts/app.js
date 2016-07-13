@@ -58,6 +58,9 @@ myApp.controller('mainController',['$scope','$http','$cookies','authService',fun
                 $scope.isAuth = true;
             }else if(status === 401){
                 alert("Unauthorized");
+                $cookies.put('authToken','');
+                $cookies.put('isAuth',false);
+                $cookies.put('email','');
             }
             else{
                 alert(status + ": " + result);
@@ -85,7 +88,9 @@ myApp.controller('mainController',['$scope','$http','$cookies','authService',fun
 
             })
             .error(function(result,status,headers){
-
+                $cookies.put('authToken','');
+                $cookies.put('isAuth',false);
+                $cookies.put('email','');
             });
     }
     
@@ -116,7 +121,7 @@ myApp.controller('loginController',['$scope','$http',function($scope,$http){
 }]);
 
 
-myApp.controller('todoController',['$scope','$http','authService',function($scope,$http,authService){
+myApp.controller('todoController',['$scope','$http','$routeParams','authService',function($scope,$http,$routeParams,authService){
     
     $scope.model = {
         description: "",
@@ -172,6 +177,24 @@ myApp.controller('todoController',['$scope','$http','authService',function($scop
                 alert("Error: " + status + " " + result.toString());
             });
         }             
+    }
+
+    $scope.updateTodo = function(todo){
+        var submit = todo
+        if(todo.completed == true){
+            submit.completed = false;
+        }
+        else{
+            submit.completed = true;
+        }
+
+        $http.put('/todos/' + todo.id,{completed: submit.completed},{headers: {'Auth' : authService.authToken}})
+        .success(function(result,status,headers){
+            todo = result;
+        })
+        .error(function(result,status,headers){
+            alert("Update not successful")
+        })
     }    
     
 }]);
