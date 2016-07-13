@@ -171,7 +171,7 @@ myApp.controller('todoController',['$scope','$http','$routeParams','authService'
             .success(function (result,status,headers) {
                 $scope.model.currentTodos = result;
                 $scope.model.description = '';
-                $scope.model.submitTodo = null;
+                $scope.model.submitTodo = false;
             })
             .error(function(result,status,headers){
                 alert("Error: " + status + " " + result.toString());

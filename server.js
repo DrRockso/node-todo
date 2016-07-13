@@ -188,7 +188,7 @@ app.delete('/users/login',middleware.requireAuth,function(req,res){
     })
 });
 
-db.sequelize.sync({force:true}).then(function(){
+db.sequelize.sync().then(function(){
     app.listen(port,function(){
         console.log('Express listening on port: ' + port); 
     });
