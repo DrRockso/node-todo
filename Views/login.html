@@ -1,5 +1,3 @@
-
-  
 <div>
   <div class="page-header">
     <h3>Sign Up</h3>
@@ -10,9 +8,15 @@
   </div>
   <div class="input-group" ng-if="!model.successSignUp">
     <br/>
-    <label for="pwd">Password: (must be between 7 and 100 characters)</label>
+    <div>
+      <label for="pwd">Password:</label>
+      <small>(between 7-100 characters)</small>
+    </div>
     <input type="password" class="form-control" id="pwd" ng-model="model.password"/>
   </div>
+  <div ng-repeat="e in model.errors">
+      {{e}}
+    </div>
   <div class="input-group" ng-if="!model.successSignUp">
     <br/>
     <input type="button" class="btn btn-primary" value="Sign Up" ng-click="signUp()"/>

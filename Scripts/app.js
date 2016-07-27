@@ -114,7 +114,7 @@ myApp.controller('loginController',['$scope','$http',function($scope,$http){
                 $scope.model.successSignUp = true;
             })
             .error(function (result,status,headers) {
-                $scope.model.errors.push('Error trying to create account')
+                $scope.model.errors.push('Error trying to create account. Please check email and password constraints')
             })
     }
     
